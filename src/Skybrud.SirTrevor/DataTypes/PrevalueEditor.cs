@@ -4,14 +4,47 @@ using System.Linq;
 using System.Web.UI;
 using System.Web.UI.HtmlControls;
 using System.Web.UI.WebControls;
-using Skybrud.SirTrevor.Blocks;
 using umbraco.cms.businesslogic.datatype;
 using umbraco.interfaces;
 
-namespace Skybrud.SirTrevor.DataTypes {
-    public class PrevalueEditor : PlaceHolder, IDataPrevalue {
+namespace Skybrud.SirTrevor.DataTypes
+{
+    public class PrevalueEditor : PlaceHolder, IDataPrevalue
+    {
+        // Fields
+        protected readonly BaseDataType DataType;
 
-        private class CheckBoxTypePair {
+        // Methods
+        public PrevalueEditor(BaseDataType dataType)
+        {
+            this.DataType = dataType;
+        }
+
+        protected override void Render(HtmlTextWriter writer)
+        {
+            writer.WriteLine("<div class=\"propertyItem\">Do we really need any pre-value options? Customise by editing /app_plugins/sirtrevor/umbraco.js</div>");
+        }
+
+        public void Save()
+        {
+        }
+
+        // Properties
+        public Control Editor
+        {
+            get
+            {
+                return this;
+            }
+        }
+    }
+
+    /*
+    public class PrevalueEditor : PlaceHolder, IDataPrevalue
+    {
+
+        private class CheckBoxTypePair
+        {
             public CheckBox CheckBox { get; set; }
             public SirTrevorBlockType BlockType { get; set; }
         }
@@ -23,21 +56,25 @@ namespace Skybrud.SirTrevor.DataTypes {
 
         protected readonly umbraco.cms.businesslogic.datatype.BaseDataType DataType;
 
-        public Control Editor {
+        public Control Editor
+        {
             get { return this; }
         }
 
-        public PrevalueEditor(BaseDataType dataType) {
-            
+        public PrevalueEditor(BaseDataType dataType)
+        {
+
             DataType = dataType;
 
             SetupChildControls();
-        
+
         }
 
-        private void SetupChildControls() {
+        private void SetupChildControls()
+        {
 
-            foreach (SirTrevorBlockType blockType in SirTrevorBlockType.GetBlockTypes()) {
+            foreach (SirTrevorBlockType blockType in SirTrevorBlockType.GetBlockTypes())
+            {
 
                 HtmlTableRow row = new HtmlTableRow();
 
@@ -48,7 +85,8 @@ namespace Skybrud.SirTrevor.DataTypes {
                 row.Cells.Add(c2);
 
                 CheckBox checkBox = new CheckBox();
-                _chkBlocks.Add(new CheckBoxTypePair {
+                _chkBlocks.Add(new CheckBoxTypePair
+                {
                     CheckBox = checkBox,
                     BlockType = blockType
                 });
@@ -63,7 +101,7 @@ namespace Skybrud.SirTrevor.DataTypes {
             Controls.Add(_blockTypesTable);
 
             #region Twitter options
-            
+
             _txtTwitterClientId.Attributes["size"] = "42";
             _txtTwitterClientSecret.Attributes["size"] = "42";
             Controls.Add(_txtTwitterClientId);
@@ -73,20 +111,26 @@ namespace Skybrud.SirTrevor.DataTypes {
 
         }
 
-        protected override void OnLoad(EventArgs e) {
+        protected override void OnLoad(EventArgs e)
+        {
 
             base.OnLoad(e);
 
-            if (Page.IsPostBack) {
+            if (Page.IsPostBack)
+            {
 
                 // do nothing here yet
 
-            } else {
+            }
+            else
+            {
 
-                string[] allowedBlocks = (DataTypeHelpers.GetPreValue(DataType, "AllowedBlocks") ?? "").Split(new [] { "," }, StringSplitOptions.RemoveEmptyEntries);
+                string[] allowedBlocks = (DataTypeHelpers.GetPreValue(DataType, "AllowedBlocks") ?? "").Split(new[] { "," }, StringSplitOptions.RemoveEmptyEntries);
 
-                foreach (var bacon in _chkBlocks) {
-                    if (allowedBlocks.Contains(bacon.BlockType.Id)) {
+                foreach (var bacon in _chkBlocks)
+                {
+                    if (allowedBlocks.Contains(bacon.BlockType.Id))
+                    {
                         bacon.CheckBox.Checked = true;
                     }
                 }
@@ -98,7 +142,8 @@ namespace Skybrud.SirTrevor.DataTypes {
 
         }
 
-        public void Save() {
+        public void Save()
+        {
 
             // Delete any existing pre-values (is this cool?)
             DataTypeHelpers.DeletePreValues(DataType);
@@ -112,7 +157,8 @@ namespace Skybrud.SirTrevor.DataTypes {
 
         }
 
-        protected override void Render(HtmlTextWriter writer) {
+        protected override void Render(HtmlTextWriter writer)
+        {
 
             writer.WriteLine("<div class=\"propertyItem\">\n");
 
@@ -141,9 +187,10 @@ namespace Skybrud.SirTrevor.DataTypes {
             writer.WriteLine("</table>\n");
 
             writer.WriteLine("</div>\n");
-        
+
         }
 
     }
+    */
 
 }

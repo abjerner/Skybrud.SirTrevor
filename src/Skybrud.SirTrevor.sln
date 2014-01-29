@@ -5,17 +5,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Skybrud.SirTrevor", "Skybru
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Foreign Dlls", "Foreign Dlls", "{1E7D6D4C-14F1-4474-AF4A-E09848DE37C5}"
 	ProjectSection(SolutionItems) = preProject
-		Foreign Dlls\businesslogic.dll = Foreign Dlls\businesslogic.dll
-		Foreign Dlls\ClientDependency.Core.dll = Foreign Dlls\ClientDependency.Core.dll
-		Foreign Dlls\ClientDependency.Core.Mvc.dll = Foreign Dlls\ClientDependency.Core.Mvc.dll
-		Foreign Dlls\cms.dll = Foreign Dlls\cms.dll
-		Foreign Dlls\interfaces.dll = Foreign Dlls\interfaces.dll
 		Foreign Dlls\MarkdownSharp.dll = Foreign Dlls\MarkdownSharp.dll
-		Foreign Dlls\Newtonsoft.Json.dll = Foreign Dlls\Newtonsoft.Json.dll
-		Foreign Dlls\Umbraco.Core.dll = Foreign Dlls\Umbraco.Core.dll
-		Foreign Dlls\umbraco.dll = Foreign Dlls\umbraco.dll
-		Foreign Dlls\umbraco.MacroEngines.dll = Foreign Dlls\umbraco.MacroEngines.dll
-		Foreign Dlls\umbraco.providers.dll = Foreign Dlls\umbraco.providers.dll
 	EndProjectSection
 EndProject
 Global
