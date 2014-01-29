@@ -6,58 +6,71 @@ using System.Web.UI.WebControls;
 using System.Xml.Linq;
 using umbraco.interfaces;
 using System.Linq;
+using ClientDependency.Core.Controls;
+using System.Web;
 
-namespace Skybrud.SirTrevor.DataTypes {
+namespace Skybrud.SirTrevor.DataTypes
+{
 
     [ValidationProperty("IsValid")]
-    public class DataEditor : UpdatePanel, IDataEditor {
-        
+    public class DataEditor : UpdatePanel, IDataEditor
+    {
+
         private readonly IData _data;
         protected readonly DataType DataType;
         protected TextBox ValueTextBox;
 
-        public DataEditor(IData data, DataType dataType) {
+        public DataEditor(IData data, DataType dataType)
+        {
             _data = data;
             DataType = dataType;
         }
 
-        public virtual bool TreatAsRichTextEditor {
+        public virtual bool TreatAsRichTextEditor
+        {
             get { return false; }
         }
 
-        public bool ShowLabel {
+        public bool ShowLabel
+        {
             get { return true; }
         }
 
-        public int DataPropertyId {
-            get { return ((Data) _data).PropertyId; }
+        public int DataPropertyId
+        {
+            get { return ((Data)_data).PropertyId; }
         }
 
         public Control Editor { get { return this; } }
 
-        public string IsValid {
-            get  { return String.Empty; }
+        public string IsValid
+        {
+            get { return String.Empty; }
         }
 
-        public void Save() {
+        public void Save()
+        {
 
             // Save the XML
             _data.Value = ValueTextBox.Text;
-        
+
         }
 
-        protected override void OnInit(EventArgs e) {
+        protected override void OnInit(EventArgs e)
+        {
 
             base.OnInit(e);
 
-            AddStyleSheet(GetCachableUrl("/Umbraco/Skybrud/SirTrevor/sir-trevor.css"));
-            AddStyleSheet(GetCachableUrl("/Umbraco/Skybrud/SirTrevor/sir-trevor-icons.css"));
+            this.AddJavascriptFolder("~/App_Plugins/SirTrevor/vendor/");
+            this.AddCssFolder("~/App_Plugins/SirTrevor/vendor/");
+            this.AddJavaScript("/App_Plugins/SirTrevor/before-blocks.js");
+            this.AddJavascriptFolder("~/App_Plugins/SirTrevor/lib/");
+            this.AddCssFolder("~/App_Plugins/SirTrevor/lib/");
+            this.AddJavascriptFolder("~/App_Plugins/SirTrevor/blocks/");
+            this.AddCssFolder("~/App_Plugins/SirTrevor/blocks/");
+            this.AddJavaScript("/App_Plugins/SirTrevor/blocks.js");
+            this.AddJavaScript("/App_Plugins/SirTrevor/umbraco.js");
 
-            AddJavaScript(GetCachableUrl("/Umbraco/Skybrud/SirTrevor/underscore.js"));
-            AddJavaScript(GetCachableUrl("/Umbraco/Skybrud/SirTrevor/eventable.js"));
-            AddJavaScript(GetCachableUrl("/Umbraco/Skybrud/SirTrevor/sir-trevor.js"));
-            //AddJavaScript(GetCachableUrl("/Umbraco/Skybrud/SirTrevor/umbraco.js"));
-            
             HtmlGenericControl outerr = new HtmlGenericControl("div");
             outerr.Attributes.Add("class", "skybrudElements");
             outerr.Attributes.Add("style", "border: 1px solid black; width: 750px;");
@@ -85,7 +98,8 @@ namespace Skybrud.SirTrevor.DataTypes {
 
 
             string dataValue = _data.Value.ToString();
-            if (dataValue.StartsWith("{") && dataValue.EndsWith("}")) {
+            if (dataValue.StartsWith("{") && dataValue.EndsWith("}"))
+            {
                 ValueTextBox.Text = dataValue;
             }
 
@@ -96,40 +110,55 @@ namespace Skybrud.SirTrevor.DataTypes {
             outerr.Controls.Add(list);
 
         }
+        private void AddJavaScript(string url)
+        {
+            var abstractContext = new System.Web.HttpContextWrapper(System.Web.HttpContext.Current);
+            var instance = ClientDependencyLoader.GetInstance(abstractContext);
+            instance.RegisterDependency(100, url, ClientDependency.Core.ClientDependencyType.Javascript);
+        }
+        private void AddJavascriptFolder(string folderPath)
+        {
+            var httpContext = HttpContext.Current;
+            var systemRootPath = httpContext.Server.MapPath("~/");
+            var folderMappedPath = httpContext.Server.MapPath(folderPath);
+            var abstractContext = new System.Web.HttpContextWrapper(System.Web.HttpContext.Current);
+            var instance = ClientDependencyLoader.GetInstance(abstractContext);
 
-        private string GetCachableUrl(string url) {
-            if (url.StartsWith("/")) {
-                string path = Page.Server.MapPath(url);
-                return File.Exists(path) ? url + "?" + File.GetLastWriteTime(path).Ticks : url;
+            if (folderMappedPath.StartsWith(systemRootPath))
+            {
+                var files = Directory.GetFiles(folderMappedPath, "*.js", SearchOption.TopDirectoryOnly);
+                foreach (var file in files)
+                {
+                    var absoluteFilePath = "~/" + file.Substring(systemRootPath.Length).Replace("\\", "/");
+                    instance.RegisterDependency(100, absoluteFilePath, ClientDependency.Core.ClientDependencyType.Javascript);
+                }
             }
-            return url;
+        }
+        private void AddCssFolder(string folderPath)
+        {
+            var httpContext = HttpContext.Current;
+            var systemRootPath = httpContext.Server.MapPath("~/");
+            var folderMappedPath = httpContext.Server.MapPath(folderPath);
+            var abstractContext = new System.Web.HttpContextWrapper(System.Web.HttpContext.Current);
+            var instance = ClientDependencyLoader.GetInstance(abstractContext);
+
+            if (folderMappedPath.StartsWith(systemRootPath))
+            {
+                var files = Directory.GetFiles(folderMappedPath, "*.css", SearchOption.TopDirectoryOnly);
+                foreach (var file in files)
+                {
+                    var absoluteFilePath = "~/" + file.Substring(systemRootPath.Length).Replace("\\", "/");
+                    instance.RegisterDependency(100, absoluteFilePath, ClientDependency.Core.ClientDependencyType.Css);
+                }
+            }
+        }
+        private void AddStyleSheet(string url)
+        {
+            var abstractContext = new System.Web.HttpContextWrapper(System.Web.HttpContext.Current);
+            var instance = ClientDependencyLoader.GetInstance(abstractContext);
+            instance.RegisterDependency(100, url, ClientDependency.Core.ClientDependencyType.Css);
         }
 
-        private void AddJavaScript(string url) {
-
-            if (Page.Header.Controls.OfType<HtmlControl>().Any(control => control.TagName == "script" && control.Attributes["src"] == url)) {
-                return;
-            }
-
-            HtmlGenericControl script = new HtmlGenericControl("script");
-            script.Attributes["type"] = "text/javascript";
-            script.Attributes["src"] = url;
-            Page.Header.Controls.Add(script);
-
-        }
-
-        private void AddStyleSheet(string url) {
-
-            if (Page.Header.Controls.OfType<HtmlControl>().Any(control => control.TagName == "link" && control.Attributes["type"] == "text/css" && control.Attributes["href"] == url)) {
-                return;
-            }
-
-            HtmlLink link = new HtmlLink { Href = url };
-            link.Attributes.Add("rel", "stylesheet");
-            link.Attributes.Add("type", "text/css");
-            Page.Header.Controls.Add(link);
-
-        }
 
     }
 

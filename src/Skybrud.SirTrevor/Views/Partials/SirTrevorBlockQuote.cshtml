@@ -1,0 +1,8 @@
+﻿@using Sniper.Umbraco.SirTrevor.Models
+@inherits Umbraco.Web.Mvc.UmbracoViewPage<QuoteBlock>
+@{
+    <blockquote>
+        @Model.data
+        <em>@Model.data.cite</em>
+    </blockquote>
+}

@@ -156,16 +156,33 @@
     <Compile Include="Properties\AssemblyInfoGenerated.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="App_Plugins\SirTrevor\before-blocks.js" />
+    <Content Include="App_Plugins\SirTrevor\blocks.js" />
+    <Content Include="App_Plugins\SirTrevor\blocks\markdown.css" />
+    <Content Include="App_Plugins\SirTrevor\blocks\markdown.js" />
+    <Content Include="App_Plugins\SirTrevor\vendor\jquery.scrollTo-1.4.3.1-min.js" />
+    <Content Include="App_Plugins\SirTrevor\vendor\jquery.visible.js" />
+    <Content Include="App_Plugins\SirTrevor\lib\expanding.js" />
+    <Content Include="App_Plugins\SirTrevor\lib\markdown.min.js" />
     <Content Include="packages.config" />
-    <Content Include="Umbraco\Skybrud\SirTrevor\eventable.js" />
-    <Content Include="Umbraco\Skybrud\SirTrevor\sir-trevor-icons.css" />
-    <Content Include="Umbraco\Skybrud\SirTrevor\sir-trevor.css" />
-    <Content Include="Umbraco\Skybrud\SirTrevor\sir-trevor.js" />
-    <Content Include="Umbraco\Skybrud\SirTrevor\umbraco.js" />
-    <Content Include="Umbraco\Skybrud\SirTrevor\underscore.js" />
+    <Content Include="App_Plugins\SirTrevor\vendor\eventable.js" />
+    <Content Include="App_Plugins\SirTrevor\vendor\sir-trevor-icons.css" />
+    <Content Include="App_Plugins\SirTrevor\vendor\sir-trevor.css" />
+    <Content Include="App_Plugins\SirTrevor\vendor\sir-trevor.js" />
+    <Content Include="App_Plugins\SirTrevor\umbraco.js" />
+    <Content Include="App_Plugins\SirTrevor\vendor\underscore.js" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="web.config" />
+    <Content Include="Views\Partials\SirTrevorBlockHeading.cshtml" />
+    <Content Include="Views\Partials\SirTrevorBlockImage.cshtml" />
+    <Content Include="Views\Partials\SirTrevorBlockMarkdown.cshtml" />
+    <Content Include="Views\Partials\SirTrevorBlockNull.cshtml" />
+    <Content Include="Views\Partials\SirTrevorBlockQuote.cshtml" />
+    <Content Include="Views\Partials\SirTrevorBlocks.cshtml" />
+    <Content Include="Views\Partials\SirTrevorBlockText.cshtml" />
+    <Content Include="Views\Partials\SirTrevorBlockVideo.cshtml" />
+    <Content Include="Views\Web.config" />
     <None Include="web.Debug.config">
       <DependentUpon>web.config</DependentUpon>
     </None>
@@ -200,7 +217,11 @@
     </VisualStudio>
   </ProjectExtensions>
   <PropertyGroup>
-    <PostBuildEvent>$(SolutionDir)Skybrud.Social.PreBuildTool.exe $(SolutionDir) Skybrud.SirTrevor 2013-10-24</PostBuildEvent>
+    <PostBuildEvent>xcopy /D /Y /F "$(ProjectDir)bin\*" "$(ProjectDir)..\..\..\..\web\bin\"
+xcopy /D /Y /F /E "$(ProjectDir)app_plugins\sirtrevor\*" "$(ProjectDir)..\..\..\..\web\app_plugins\sirtrevor\"
+xcopy /D /Y /F /E "$(ProjectDir)views\*.cshtml" "$(ProjectDir)..\..\..\..\web\views\"
+
+</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
