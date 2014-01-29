@@ -10,13 +10,13 @@ using System.Linq;
 namespace Skybrud.SirTrevor.DataTypes {
 
     [ValidationProperty("IsValid")]
-    public class SirTrevorDataEditor : UpdatePanel, IDataEditor {
+    public class DataEditor : UpdatePanel, IDataEditor {
         
         private readonly IData _data;
-        protected readonly SirTrevorDataType DataType;
+        protected readonly DataType DataType;
         protected TextBox ValueTextBox;
 
-        public SirTrevorDataEditor(IData data, SirTrevorDataType dataType) {
+        public DataEditor(IData data, DataType dataType) {
             _data = data;
             DataType = dataType;
         }
@@ -30,7 +30,7 @@ namespace Skybrud.SirTrevor.DataTypes {
         }
 
         public int DataPropertyId {
-            get { return ((SirTrevorData) _data).PropertyId; }
+            get { return ((Data) _data).PropertyId; }
         }
 
         public Control Editor { get { return this; } }

@@ -4,9 +4,9 @@ using umbraco.cms.businesslogic.datatype;
 
 namespace Skybrud.SirTrevor.DataTypes {
     
-    public class SirTrevorData : DefaultData {
+    public class Data : DefaultData {
 
-        public SirTrevorData(BaseDataType dataType) : base(dataType) { }
+        public Data(BaseDataType dataType) : base(dataType) { }
 
         public override XmlNode ToXMl(XmlDocument data) {
 

@@ -9,7 +9,7 @@ using umbraco.cms.businesslogic.datatype;
 using umbraco.interfaces;
 
 namespace Skybrud.SirTrevor.DataTypes {
-    public class SirTrevorPrevalueEditor : PlaceHolder, IDataPrevalue {
+    public class PrevalueEditor : PlaceHolder, IDataPrevalue {
 
         private class CheckBoxTypePair {
             public CheckBox CheckBox { get; set; }
@@ -27,7 +27,7 @@ namespace Skybrud.SirTrevor.DataTypes {
             get { return this; }
         }
 
-        public SirTrevorPrevalueEditor(BaseDataType dataType) {
+        public PrevalueEditor(BaseDataType dataType) {
             
             DataType = dataType;
 

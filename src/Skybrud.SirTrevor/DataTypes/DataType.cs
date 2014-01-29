@@ -4,24 +4,24 @@ using umbraco.interfaces;
 
 namespace Skybrud.SirTrevor.DataTypes {
     
-    public class SirTrevorDataType : BaseDataType, IDataType {
+    public class DataType : BaseDataType, IDataType {
         
         private IDataEditor _dataEditor;
         private IData _baseData;
-        private SirTrevorPrevalueEditor _prevalueEditor;
+        private PrevalueEditor _prevalueEditor;
 
         public override IDataEditor DataEditor {
             get {
-                return _dataEditor ?? (_dataEditor = new SirTrevorDataEditor(Data, this));
+                return _dataEditor ?? (_dataEditor = new DataEditor(Data, this));
             }
         }
 
         public override IDataPrevalue PrevalueEditor {
-            get { return _prevalueEditor ?? (_prevalueEditor = new SirTrevorPrevalueEditor(this)); }
+            get { return _prevalueEditor ?? (_prevalueEditor = new PrevalueEditor(this)); }
         }
 
         public override IData Data {
-            get { return _baseData ?? (_baseData = new SirTrevorData(this)); }
+            get { return _baseData ?? (_baseData = new Data(this)); }
         }
 
         public override Guid Id {
