@@ -5,7 +5,7 @@
 //you will also need to create a razor partial for each new type receiving the hydrated model
 /*
 //Sample partial
-@using Sniper.Umbraco.SirTrevor.Models
+@using Skybrud.SirTrevor.Models
 @inherits Umbraco.Web.Mvc.UmbracoViewPage<NewBlock>
 @{
     <blockquote>
@@ -15,7 +15,7 @@
 }
 
 //Model for hydration
-namespace Sniper.Umbraco.SirTrevor.Models
+namespace Skybrud.SirTrevor.Models
 {
     public class NewBlock : IBlock 
     {

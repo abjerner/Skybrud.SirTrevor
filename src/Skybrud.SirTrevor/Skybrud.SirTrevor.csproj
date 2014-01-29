@@ -149,11 +149,32 @@
     <Compile Include="DataTypes\DataEditor.cs" />
     <Compile Include="DataTypes\DataType.cs" />
     <Compile Include="DataTypes\PrevalueEditor.cs" />
+    <Compile Include="Lib\ShortGuid.cs" />
+    <Compile Include="Models\Blocks.cs" />
+    <Compile Include="Models\Container.cs" />
+    <Compile Include="Models\FileWrapper.cs" />
+    <Compile Include="Models\HeadingBlock.cs" />
+    <Compile Include="Models\HeadingBlockData.cs" />
+    <Compile Include="Models\IBlock.cs" />
+    <Compile Include="Models\IBlockData.cs" />
+    <Compile Include="Models\ImageBlock.cs" />
+    <Compile Include="Models\ImageBlockData.cs" />
+    <Compile Include="Models\MarkdownBlock.cs" />
+    <Compile Include="Models\MarkdownBlockData.cs" />
+    <Compile Include="Models\NullBlock.cs" />
+    <Compile Include="Models\QuoteBlock.cs" />
+    <Compile Include="Models\QuoteBlockData.cs" />
+    <Compile Include="Models\TextBlock.cs" />
+    <Compile Include="Models\TextBlockData.cs" />
+    <Compile Include="Models\VideoBlock.cs" />
+    <Compile Include="Models\VideoBlockData.cs" />
     <Compile Include="Razor\V4\RazorDataTypeModel.cs" />
     <Compile Include="Razor\V4\DynamicJson\DynamicJsonConverter.cs" />
     <Compile Include="Razor\V4\DynamicJson\DynamicJsonObject.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\AssemblyInfoGenerated.cs" />
+    <Compile Include="Razor\V6\BlockConverter.cs" />
+    <Compile Include="Razor\V6\PropertyEditorValueConverter.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="App_Plugins\SirTrevor\before-blocks.js" />
