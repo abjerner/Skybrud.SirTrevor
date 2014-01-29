@@ -8,5 +8,9 @@ namespace Skybrud.SirTrevor.Models
     public class Container
     {
         public Blocks data;
+        public Container()
+        {
+            data = new Blocks();
+        }
     }
 }

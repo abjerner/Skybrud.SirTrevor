@@ -61,8 +61,14 @@ namespace Skybrud.SirTrevor.DataTypes
 
             base.OnInit(e);
 
-            this.AddJavascriptFolder("~/App_Plugins/SirTrevor/vendor/");
-            this.AddCssFolder("~/App_Plugins/SirTrevor/vendor/");
+            this.AddStyleSheet("/App_Plugins/SirTrevor/vendor/sir-trevor.css");
+            this.AddStyleSheet("/App_Plugins/SirTrevor/vendor/sir-trevor-icons.css");
+            this.AddJavaScript("/App_Plugins/SirTrevor/vendor/underscore.js");
+            this.AddJavaScript("/App_Plugins/SirTrevor/vendor/eventable.js");
+            this.AddJavaScript("/App_Plugins/SirTrevor/vendor/sir-trevor.js");
+            this.AddJavaScript("/App_Plugins/SirTrevor/vendor/jquery.visible.js");
+            this.AddJavaScript("/App_Plugins/SirTrevor/vendor/jquery.scrollTo-1.4.3.1-min.js");
+
             this.AddJavaScript("/App_Plugins/SirTrevor/before-blocks.js");
             this.AddJavascriptFolder("~/App_Plugins/SirTrevor/lib/");
             this.AddCssFolder("~/App_Plugins/SirTrevor/lib/");
@@ -78,23 +84,22 @@ namespace Skybrud.SirTrevor.DataTypes
             ContentTemplateContainer.Controls.Add(outerr);
 
             ValueTextBox = new TextBox { TextMode = TextBoxMode.MultiLine };
-            ValueTextBox.Attributes["class"] = "sir-trevor-" + DataPropertyId;
+            ValueTextBox.Attributes["class"] = "sir-trevor-editor sir-trevor-" + DataPropertyId;
             outerr.Controls.Add(ValueTextBox);
 
-            HtmlGenericControl script = new HtmlGenericControl("script");
-            script.EnableViewState = false;
-            script.Attributes["type"] = "text/javascript";
-            outerr.Controls.Add(script);
+            //HtmlGenericControl script = new HtmlGenericControl("script");
+            //script.EnableViewState = false;
+            //script.Attributes["type"] = "text/javascript";
+            //outerr.Controls.Add(script);
 
-            script.InnerHtml = "$(function(){\n";
-            script.InnerHtml += "  var editor = new SirTrevor.Editor({ el: $('.sir-trevor-" + DataPropertyId + "') });\n";
-            script.InnerHtml += "  editor.umbraco = {\n";
-            script.InnerHtml += "    dtdid: " + DataType.DataTypeDefinitionId + "\n";
-            script.InnerHtml += "  };\n";
-            script.InnerHtml += "  editor.onFormSubmit();\n";
-            script.InnerHtml += "  editor.$el.val( JSON.stringify(editor.dataStore, null, '  ') );\n";
-            script.InnerHtml += "});\n";
-
+            //script.InnerHtml = "$(function(){\n";
+            //script.InnerHtml += "  var editor = new SirTrevor.Editor({ el: $('.sir-trevor-" + DataPropertyId + "') });\n";
+            //script.InnerHtml += "  editor.umbraco = {\n";
+            //script.InnerHtml += "    dtdid: " + DataType.DataTypeDefinitionId + "\n";
+            //script.InnerHtml += "  };\n";
+            //script.InnerHtml += "  editor.onFormSubmit();\n";
+            //script.InnerHtml += "  editor.$el.val( JSON.stringify(editor.dataStore, null, '  ') );\n";
+            //script.InnerHtml += "});\n";
 
 
             string dataValue = _data.Value.ToString();

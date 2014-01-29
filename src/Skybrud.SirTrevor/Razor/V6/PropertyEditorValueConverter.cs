@@ -16,13 +16,20 @@ namespace Skybrud.SirTrevor
             try
             {
                 string json = string.Format("{0}", value);
-                var model = JsonConvert.DeserializeObject<Container>(json, new BlockConverter());
-                if (model != null && model.data != null)
+                if (!string.IsNullOrWhiteSpace(json))
                 {
-                    model.data._raw = json;
-                    return new global::Umbraco.Core.Attempt<object>(true, model.data);
+                    var model = JsonConvert.DeserializeObject<Container>(json, new BlockConverter());
+                    if (model != null && model.data != null)
+                    {
+                        model.data._raw = json;
+                        return new global::Umbraco.Core.Attempt<object>(true, model.data);
+                    }
+                    return new global::Umbraco.Core.Attempt<object>(false, null);
                 }
-                return new global::Umbraco.Core.Attempt<object>(false, null);
+                else
+                {
+                    return new global::Umbraco.Core.Attempt<object>(true, new Container());
+                }
             }
             catch
             {
