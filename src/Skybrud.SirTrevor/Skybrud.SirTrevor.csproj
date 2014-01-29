@@ -144,11 +144,14 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controllers\SirTrevorController.cs" />
     <Compile Include="DataTypes\DataTypeHelpers.cs" />
     <Compile Include="DataTypes\Data.cs" />
     <Compile Include="DataTypes\DataEditor.cs" />
     <Compile Include="DataTypes\DataType.cs" />
     <Compile Include="DataTypes\PrevalueEditor.cs" />
+    <Compile Include="Init\RouteConfig.cs" />
+    <Compile Include="Init\StartupHandler.cs" />
     <Compile Include="Lib\ShortGuid.cs" />
     <Compile Include="Models\Blocks.cs" />
     <Compile Include="Models\Container.cs" />
