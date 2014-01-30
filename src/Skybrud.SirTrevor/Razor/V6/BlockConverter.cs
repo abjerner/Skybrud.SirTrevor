@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using umbraco.BusinessLogic.Utils;
 
 namespace Skybrud.SirTrevor
 {
@@ -22,7 +23,11 @@ namespace Skybrud.SirTrevor
             var type = (string)jObject.Property("type");
             try
             {
-                Type blockModelType = Type.GetType(string.Format("Skybrud.SirTrevor.Models.{0}Block", System.Globalization.CultureInfo.CurrentCulture.TextInfo.ToTitleCase(type)));
+                var blockModelType = Umbraco.Core.TypeFinder
+                    .FindClassesOfType<IBlock>()
+                    .Where(block => 
+                        block.Namespace == "Skybrud.SirTrevor.Models" &&
+                        block.Name.EndsWith(string.Format("{0}Block", System.Globalization.CultureInfo.CurrentCulture.TextInfo.ToTitleCase(type)))).FirstOrDefault();
                 if (blockModelType != null)
                 {
                     var block = Activator.CreateInstance(blockModelType);
