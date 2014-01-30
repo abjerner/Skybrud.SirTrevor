@@ -23,14 +23,21 @@ namespace Skybrud.SirTrevor
             try
             {
                 Type blockModelType = Type.GetType(string.Format("Skybrud.SirTrevor.Models.{0}Block", System.Globalization.CultureInfo.CurrentCulture.TextInfo.ToTitleCase(type)));
-                var block = Activator.CreateInstance(blockModelType);
-                (block as IBlock).type = type;
-                return (block as IBlock);
+                if (blockModelType != null)
+                {
+                    var block = Activator.CreateInstance(blockModelType);
+                    if (block != null)
+                    {
+                        (block as IBlock).type = type;
+                        return (block as IBlock);
+                    }
+                }
             }
             catch
             {
                 return new NullBlock() { type = type };
             }
+            return new NullBlock() { type = type };
             //throw new ApplicationException(String.Format("The block type {0} is not supported for deserialization", type));
         }
 
