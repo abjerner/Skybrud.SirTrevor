@@ -131,7 +131,7 @@ namespace Skybrud.SirTrevor.DataTypes
 
             if (folderMappedPath.StartsWith(systemRootPath))
             {
-                var files = Directory.GetFiles(folderMappedPath, "*.js", SearchOption.TopDirectoryOnly);
+                var files = Directory.GetFiles(folderMappedPath, "*.js", SearchOption.AllDirectories);
                 foreach (var file in files)
                 {
                     var absoluteFilePath = "~/" + file.Substring(systemRootPath.Length).Replace("\\", "/");
@@ -149,7 +149,7 @@ namespace Skybrud.SirTrevor.DataTypes
 
             if (folderMappedPath.StartsWith(systemRootPath))
             {
-                var files = Directory.GetFiles(folderMappedPath, "*.css", SearchOption.TopDirectoryOnly);
+                var files = Directory.GetFiles(folderMappedPath, "*.css", SearchOption.AllDirectories);
                 foreach (var file in files)
                 {
                     var absoluteFilePath = "~/" + file.Substring(systemRootPath.Length).Replace("\\", "/");
