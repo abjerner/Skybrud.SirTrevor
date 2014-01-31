@@ -1,0 +1,16 @@
+﻿@using Skybrud.SirTrevor.Models
+@inherits Umbraco.Web.Mvc.UmbracoViewPage<Blocks>
+@{
+    <pre>@Model.ToJson()</pre>
+    foreach (var block in Model)
+    {
+        if (!(block is NullBlock))
+        { 
+            @Html.Partial(string.Format("SirTrevorBlock{0}", System.Globalization.CultureInfo.CurrentCulture.TextInfo.ToTitleCase(block.type)), block);
+        }
+        else 
+        {
+            @Html.Partial("SirTrevorBlockNull", block);
+        }
+    }
+}

@@ -1,0 +1,65 @@
+﻿@using Skybrud.SirTrevor.Models
+@inherits Umbraco.Web.Mvc.UmbracoViewPage<VideoBlock>
+@{
+             <style type="text/css">
+            .responsive-object
+            {
+              position: relative;
+              padding-bottom: 67.5%;
+              height: 0;
+              margin: 0;
+              overflow: hidden;
+            }
+            .responsive-object iframe,
+            .responsive-object object,
+            .responsive-object embed
+            {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+            }
+        </style>
+        <div id="vid-@Model.data.id" style="position:relative;">
+             @switch (Model.data.source)
+             {
+                 case "youtube":
+                     <a href="http://youtube.com/watch?v=@Model.data.remote_id"></a>
+                     break;
+                 case "vimeo":
+                     <a href="http://vimeo.com/@Model.data.remote_id"></a>
+                     break;
+                 default:
+                     <strong>Video type @Model.data.source not supported</strong>
+                     break;
+             }
+        </div>
+        <script type="text/javascript">
+            jQuery(document).ready(function () {
+                jQuery('#vid-@Model.data.id').embedly({
+                    key: '6b2a6a74e33e11e091d14040d3dc5c07',
+                    display: function (obj) {
+                        // Overwrite the default display.
+                        if (obj.type === 'video' || obj.type === 'rich') {
+                            // Figure out the percent ratio for the padding. This is (height/width) * 100
+                            var ratio = ((obj.height / obj.width) * 100).toPrecision(4) + '%'
+                            
+                            // Wrap the embed in a responsive object div. See the CSS here!
+                            var div = jQuery('<div class="responsive-object">').css({
+                                paddingBottom: ratio
+                            });
+
+                            // Add the embed to the div.
+                            div.html(obj.html);
+
+                            // Replace the element with the div.
+                            jQuery(this).replaceWith(div);
+                                                
+                        }
+                    }
+                });
+            });
+        </script>
+      
+}
