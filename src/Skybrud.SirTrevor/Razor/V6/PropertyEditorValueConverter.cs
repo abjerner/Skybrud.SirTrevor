@@ -28,7 +28,7 @@ namespace Skybrud.SirTrevor
                 }
                 else
                 {
-                    return new global::Umbraco.Core.Attempt<object>(true, new Container());
+                    return new global::Umbraco.Core.Attempt<object>(true, (new Container()).data);
                 }
             }
             catch
