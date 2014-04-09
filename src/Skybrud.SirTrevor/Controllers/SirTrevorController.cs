@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Drawing.Drawing2D;
-using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
 using System.Web;
@@ -11,112 +7,70 @@ using Umbraco.Core;
 using Umbraco.Core.Models;
 using Umbraco.Core.Services;
 
-namespace Sniper.Umbraco.SirTrevor
-{
-    public class SirTrevorController : Controller
-    {
-        public ActionResult UploadImage()
-        {
-            string url = string.Empty;
-            //are we hosted?
-            if (ApplicationContext.Current != null)
-            {
-                //are we logged into umbraco
-                if (umbraco.BusinessLogic.User.GetCurrent() != null)
-                {
-                    //get media service
-                    var mediaService = ApplicationContext.Current.Services.MediaService;
+namespace Skybrud.SirTrevor.Controllers {
+    
+    public class SirTrevorController : Controller {
 
-                    string fileName = Request.Form["attachment[name]"];
-                    HttpPostedFileBase file = Request.Files["attachment[file]"];
+        protected IMediaService MediaService {
+            get { return ApplicationContext.Current.Services.MediaService; }
+        }
 
-                    //get "Content Images" folder
-                    IMedia parentFolder = mediaService.GetRootMedia().Where(child => child.Name == "Content Images").FirstOrDefault();
+        /// <summary>
+        /// Ensures that we have a media folder, and that we use the same folder even if the user
+        /// decides to rename it. 
+        /// </summary>
+        protected IMedia EnsureMediaFolder() {
 
-                    //if folder doesn't exist
-                    if (parentFolder == null)
-                    {
-                        //create folder
-                        parentFolder = mediaService.CreateMedia("Content Images", -1, "Folder");
-                        mediaService.Save(parentFolder);
-                    }
+            // Define the GUID for our folder
+            Guid guid = Guid.Parse("904ec7da-7532-4f0f-9486-605402b2fc41");
+            
+            // Search for our special folder
+            IMedia folder = MediaService.GetRootMedia().FirstOrDefault(x => x.Key == guid);
 
-                    //create item
-                    string mediaName = Path.GetFileNameWithoutExtension(fileName);
-                    var newFile = mediaService.CreateMedia(mediaName, parentFolder.Id, "Image");
-                    //save to generate id
-                    mediaService.Save(newFile);
-
-                    //physically save new file
-                    string virtualPath = string.Format("/media/{0}/{1}", newFile.Id, fileName);
-                    string physicalPath = Server.MapPath("~" + virtualPath);
-                    //get folder
-                    string folder = Path.GetDirectoryName(physicalPath);
-                    //and detail
-                    DirectoryInfo folderInfo = new DirectoryInfo(folder);
-                    //check exists
-                    if (!folderInfo.Exists)
-                    {
-                        //create
-                        folderInfo.Create();
-                    }
-                    //save file to media folder
-                    file.SaveAs(physicalPath);
-
-                    //we also need to generate filename_thumb.jpg for umbraco to show a preview
-                    using (Bitmap image = new Bitmap(physicalPath))
-                    {
-                        int width = 100;
-                        decimal ratio = (decimal)width / (decimal)image.Width;
-                        int height = (int)Math.Ceiling(image.Height * ratio);
-                        using (Bitmap thumbnail = new Bitmap(width, height))
-                        {
-                            using (Graphics g = Graphics.FromImage(thumbnail))
-                            {
-                                g.InterpolationMode = InterpolationMode.HighQualityBicubic;
-                                //todo: this could be wrong, thumbnail was not scaled correctly
-                                g.DrawImage(image, new RectangleF(PointF.Empty, new SizeF(width,height)));
-                            }
-                            string thumbnailPath = Path.Combine(folder, string.Format("{0}_thumb.jpg", Path.GetFileNameWithoutExtension(physicalPath)));
-                            SaveWithQuality(thumbnail, thumbnailPath, 80L);
-                        }
-                    }
-
-                    //set file property
-                    newFile.SetValue("umbracoFile", virtualPath);
-
-                    //update media item (now with path to file)
-                    mediaService.Save(newFile);
-
-                    url = string.Format("{{ \"file\": {{ \"url\": \"{0}\" }} }}", virtualPath);
-                }
+            // Create the folder if it doesn't exist
+            if (folder == null) { 
+                folder = MediaService.CreateMedia("SirTrevor Uploaded Images", -1, "Folder");
+                if (folder == null) throw new Exception("WTF?");
+                folder.Key = Guid.Parse("904ec7da-7532-4f0f-9486-605402b2fc41");
+                MediaService.Save(folder);
             }
+            
+            return folder;
 
-            return Content(url);
         }
 
-        private void SaveWithQuality(Bitmap bitmap, string thumbnailPath, long jpgQuality)
-        {
-            ImageCodecInfo jpgEncoder = GetEncoder(ImageFormat.Jpeg);
-            System.Drawing.Imaging.Encoder myEncoder = System.Drawing.Imaging.Encoder.Quality;
-            EncoderParameters myEncoderParameters = new EncoderParameters(1);
-            EncoderParameter myEncoderParameter = new EncoderParameter(myEncoder, jpgQuality);
-            myEncoderParameters.Param[0] = myEncoderParameter;
-            bitmap.Save(thumbnailPath, jpgEncoder, myEncoderParameters);
-        }
-        private ImageCodecInfo GetEncoder(ImageFormat format)
-        {
+        public ActionResult UploadImage() {
 
-            ImageCodecInfo[] codecs = ImageCodecInfo.GetImageDecoders();
+            // Are we hosted?
+            if (ApplicationContext.Current == null) return Content("");
 
-            foreach (ImageCodecInfo codec in codecs)
-            {
-                if (codec.FormatID == format.Guid)
-                {
-                    return codec;
-                }
-            }
-            return null;
+            // Are we logged into Umbraco?
+            if (umbraco.BusinessLogic.User.GetCurrent() == null) return Content("");
+            
+            // Grab the filename and a reference to the uploaded file
+            string fileName = Request.Form["attachment[name]"];
+            HttpPostedFileBase file = Request.Files["attachment[file]"];
+
+            // Get or create the media folder
+            IMedia parentFolder = EnsureMediaFolder();
+
+            // Create a media item for the file
+            string mediaName = Path.GetFileNameWithoutExtension(fileName);
+            IMedia newFile = MediaService.CreateMedia(mediaName, parentFolder.Id, "Image");
+            MediaService.Save(newFile);
+
+            // Set file property
+            newFile.SetValue("umbracoFile", file);
+            MediaService.Save(newFile);
+
+            // Get the media URL
+            string mediaUrl = newFile.GetValue<string>("umbracoFile");
+
+            // Return the media URL
+            return Content(String.Format("{{ \"file\": {{ \"url\": \"{0}\" }} }}", mediaUrl), "application/json");
+
         }
+
     }
+
 }
